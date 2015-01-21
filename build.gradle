@@ -81,13 +81,16 @@ task('intTest', type: Test, dependsOn: 'intTestClasses') {
 afterEvaluate {
 
 	task('startArangoDb') << {
+		new File(project.arangoDataDir + "/data").mkdirs()
 		project.ext.arangodb_process = net.swisstech.swissarmyknife.sys.linux.BackgroundProcess
-			.launch( [
+			.launch([
 				'/usr/sbin/arangod',
 				'--server.endpoint',
-				"tcp://127.0.0.1:${project.arangoDbPort as String}",
+				"tcp://127.0.0.1:${project.arangoDbPort}" as String,
 				'--database.directory',
-				project.arangoDataDir as String
+				"${project.arangoDataDir}/data" as String,
+				'--log.file',
+				'+'
 			], null)
 			.waitForOpenPorts([ project.arangoDbPort ], 10000)
 	}
