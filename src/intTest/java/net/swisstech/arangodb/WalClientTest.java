@@ -4,6 +4,7 @@ import static net.swisstech.swissarmyknife.lang.Strings.notBlank;
 import static net.swisstech.swissarmyknife.test.Assert.assertGreaterThan;
 import static net.swisstech.swissarmyknife.test.Assert.assertNotEmpty;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 
 import java.io.IOException;
 
@@ -12,6 +13,8 @@ import net.swisstech.arangodb.model.LoggerState;
 import net.swisstech.arangodb.model.ServerId;
 import net.swisstech.arangodb.model.wal.WalDump;
 import net.swisstech.arangodb.model.wal.WalEvent;
+import net.swisstech.arangodb.model.wal.WalEventIterator;
+import net.swisstech.arangodb.model.wal.WalHeaders;
 
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -55,10 +58,18 @@ public class WalClientTest {
 		WalClient wc = new WalClient("http://localhost:" + port);
 		WalDump wd = wc.dump("_users", 0);
 		assertNotNull(wd);
-		assertNotNull(wd.getHeaders());
-		assertNotNull(wd.getEvents());
+
+		WalHeaders headers = wd.getHeaders();
+		assertNotNull(headers);
+		assertNotNull(headers.getReplicationActive());
+		assertNotNull(headers.getReplicationCheckmore());
+		assertNotNull(headers.getReplicationLastincluded());
+		assertNull(headers.getReplicationLasttick());
+
+		WalEventIterator events = wd.getEvents();
+		assertNotNull(events);
 		int counter = 0;
-		for (WalEvent event : wd.getEvents()) {
+		for (WalEvent event : events) {
 			counter++;
 			assertNotNull(event);
 		}

@@ -6,40 +6,40 @@ package net.swisstech.arangodb.model.wal;
  */
 public class WalHeaders {
 
-	private boolean xArangoReplicationActive;
-	private String xArangoReplicationLastincluded;
-	private String xArangoReplicationLasttick;
-	private boolean xArangoReplicationCheckmore;
+	private Boolean replicationActive;
+	private String replicationLastincluded;
+	private String replicationLasttick;
+	private Boolean replicationCheckmore;
 
-	public boolean isxArangoReplicationActive() {
-		return xArangoReplicationActive;
+	public Boolean getReplicationActive() {
+		return replicationActive;
 	}
 
-	public void setxArangoReplicationActive(boolean xArangoReplicationActive) {
-		this.xArangoReplicationActive = xArangoReplicationActive;
+	public void setReplicationActive(Boolean replicationActive) {
+		this.replicationActive = replicationActive;
 	}
 
-	public String getxArangoReplicationLastincluded() {
-		return xArangoReplicationLastincluded;
+	public String getReplicationLastincluded() {
+		return replicationLastincluded;
 	}
 
-	public void setxArangoReplicationLastincluded(String xArangoReplicationLastincluded) {
-		this.xArangoReplicationLastincluded = xArangoReplicationLastincluded;
+	public void setReplicationLastincluded(String replicationLastincluded) {
+		this.replicationLastincluded = replicationLastincluded;
 	}
 
-	public String getxArangoReplicationLasttick() {
-		return xArangoReplicationLasttick;
+	public String getReplicationLasttick() {
+		return replicationLasttick;
 	}
 
-	public void setxArangoReplicationLasttick(String xArangoReplicationLasttick) {
-		this.xArangoReplicationLasttick = xArangoReplicationLasttick;
+	public void setReplicationLasttick(String replicationLasttick) {
+		this.replicationLasttick = replicationLasttick;
 	}
 
-	public boolean isxArangoReplicationCheckmore() {
-		return xArangoReplicationCheckmore;
+	public Boolean getReplicationCheckmore() {
+		return replicationCheckmore;
 	}
 
-	public void setxArangoReplicationCheckmore(boolean xArangoReplicationCheckmore) {
-		this.xArangoReplicationCheckmore = xArangoReplicationCheckmore;
+	public void setReplicationCheckmore(Boolean replicationCheckmore) {
+		this.replicationCheckmore = replicationCheckmore;
 	}
 }

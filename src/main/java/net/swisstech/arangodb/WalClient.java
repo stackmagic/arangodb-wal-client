@@ -54,10 +54,10 @@ public class WalClient {
 		WalEventIterator we = new WalEventIterator(li);
 
 		WalHeaders wh = new WalHeaders();
-		wh.setxArangoReplicationActive(Boolean.parseBoolean(response.header("x-arango-replication-active")));
-		wh.setxArangoReplicationLastincluded(response.header("x-arango-replication-lastincluded"));
-		wh.setxArangoReplicationLasttick(response.header("x-arango-replication-lasttick"));
-		wh.setxArangoReplicationCheckmore(Boolean.parseBoolean(response.header("x-arango-replication-checkmore")));
+		wh.setReplicationActive(Boolean.parseBoolean(response.header("x-arango-replication-active")));
+		wh.setReplicationLastincluded(response.header("x-arango-replication-lastincluded"));
+		wh.setReplicationLasttick(response.header("x-arango-replication-lasttick"));
+		wh.setReplicationCheckmore(Boolean.parseBoolean(response.header("x-arango-replication-checkmore")));
 
 		WalDump wd = new WalDump();
 		wd.setHeaders(wh);
