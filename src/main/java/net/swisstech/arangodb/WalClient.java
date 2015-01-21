@@ -55,7 +55,11 @@ public class WalClient {
 	}
 
 	/** see: https://docs.arangodb.com/HttpReplications/OtherReplication.html */
-	public ServerId serverId() {
-		throw new UnsupportedOperationException();
+	public ServerId serverId() throws IOException {
+		String url = baseUrl + "/_api/replication/server-id";
+		Request request = new Request.Builder().url(url).build();
+		Response response = httpClient.newCall(request).execute();
+		InputStream input = response.body().byteStream();
+		return mapper.readValue(input, ServerId.class);
 	}
 }
