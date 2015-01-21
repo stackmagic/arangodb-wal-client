@@ -40,17 +40,17 @@ public class WalClient {
 	}
 
 	/** see: https://docs.arangodb.com/HttpReplications/ReplicationDump.html */
-	public String dump() {
+	public String dump() throws IOException {
 		throw new UnsupportedOperationException();
 	}
 
 	/** see: https://docs.arangodb.com/HttpReplications/ReplicationLogger.html */
-	public String loggerFollow() {
+	public String loggerFollow() throws IOException {
 		throw new UnsupportedOperationException();
 	}
 
 	/** see: https://docs.arangodb.com/HttpReplications/ReplicationLogger.html */
-	public LoggerState loggerState() {
+	public LoggerState loggerState() throws IOException {
 		throw new UnsupportedOperationException();
 	}
 
