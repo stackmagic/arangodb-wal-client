@@ -28,11 +28,16 @@ public enum CollectionType {
 			return null;
 		}
 
-		int id = Integer.parseInt(value);
-		for (CollectionType cp : values()) {
-			if (cp.id == id) {
-				return cp;
+		try {
+			int id = Integer.parseInt(value);
+			for (CollectionType cp : values()) {
+				if (cp.id == id) {
+					return cp;
+				}
 			}
+		}
+		catch (NumberFormatException e) {
+			return null;
 		}
 
 		return null;

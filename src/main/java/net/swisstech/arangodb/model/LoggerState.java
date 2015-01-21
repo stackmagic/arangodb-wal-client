@@ -30,23 +30,4 @@ public class LoggerState extends AbstractInfo {
 	public void setClients(List<Object> clients) {
 		this.clients = clients;
 	}
-
-	/** see: https://docs.arangodb.com/HttpReplications/ReplicationLogger.html */
-	public static class Server extends ServerId {
-
-		private String version;
-
-		public String getVersion() {
-			return version;
-		}
-
-		public void setVersion(String version) {
-			this.version = version;
-		}
-
-		@Override
-		public String toString() {
-			return "Server version: " + version + " serverId: " + getServerId();
-		}
-	}
 }
