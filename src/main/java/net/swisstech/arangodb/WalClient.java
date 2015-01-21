@@ -15,14 +15,12 @@ import com.squareup.okhttp.Response;
 public class WalClient {
 
 	private String baseUrl;
-	private final int chunkSize;
 
 	private final OkHttpClient httpClient = new OkHttpClient();
 	private final ObjectMapper mapper = new ObjectMapper();
 
-	public WalClient(String baseUrl, int chunkSize) {
+	public WalClient(String baseUrl) {
 		this.baseUrl = baseUrl;
-		this.chunkSize = chunkSize;
 	}
 
 	/** see: https://docs.arangodb.com/HttpReplications/ReplicationDump.html */
