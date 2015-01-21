@@ -78,3 +78,25 @@ task('intTest', type: Test, dependsOn: 'intTestClasses') {
 	classpath      = sourceSets.intTest.runtimeClasspath
 }
 
+afterEvaluate {
+
+	task('startArangoDb') << {
+		project.ext.arangodb_process = net.swisstech.swissarmyknife.sys.linux.BackgroundProcess
+			.launch( [
+				'/usr/sbin/arangod',
+				'--server.endpoint',
+				"tcp://127.0.0.1:${project.arangoDbPort as String}",
+				'--database.directory',
+				project.arangoDataDir as String
+			], null)
+			.waitForOpenPorts([ project.arangoDbPort ], 10000)
+	}
+
+	task('stopArangoDb') << {
+		project.arangodb_process.shutdown()
+		project.delete(project.arangoDataDir)
+	}
+
+	tasks.intTest.dependsOn('startArangoDb')
+	tasks.intTest.finalizedBy('stopArangoDb')
+}
