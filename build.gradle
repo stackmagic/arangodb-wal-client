@@ -33,6 +33,8 @@ dependencies {
 	compile 'net.swisstech:swissarmyknife:+'
 	compile 'org.slf4j:slf4j-api:+'
 
+	compile 'commons-io:commons-io:+'
+
 	compile 'com.fasterxml.jackson.core:jackson-databind:+'
 
 	compile 'com.squareup.okhttp:okhttp:+'

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import net.swisstech.arangodb.model.Inventory;
 import net.swisstech.arangodb.model.LoggerState;
 import net.swisstech.arangodb.model.ServerId;
+import net.swisstech.arangodb.model.wal.WalDump;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.okhttp.OkHttpClient;
@@ -38,12 +39,12 @@ public class WalClient {
 	}
 
 	/** see: https://docs.arangodb.com/HttpReplications/ReplicationDump.html */
-	public String dump() throws IOException {
+	public WalDump dump() throws IOException {
 		throw new UnsupportedOperationException();
 	}
 
 	/** see: https://docs.arangodb.com/HttpReplications/ReplicationLogger.html */
-	public String loggerFollow() throws IOException {
+	public WalDump loggerFollow() throws IOException {
 		throw new UnsupportedOperationException();
 	}
 
