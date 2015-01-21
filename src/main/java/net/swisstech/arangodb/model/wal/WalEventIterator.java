@@ -46,6 +46,6 @@ public class WalEventIterator implements Iterator<WalEvent>, Iterable<WalEvent> 
 
 	@Override
 	public void remove() {
-		lineIterator.remove();
+		throw new UnsupportedOperationException();
 	}
 }

@@ -30,11 +30,16 @@ public enum WalEventType {
 			return null;
 		}
 
-		int id = Integer.parseInt(value);
-		for (WalEventType cp : values()) {
-			if (cp.id == id) {
-				return cp;
+		try {
+			int id = Integer.parseInt(value);
+			for (WalEventType cp : values()) {
+				if (cp.id == id) {
+					return cp;
+				}
 			}
+		}
+		catch (NumberFormatException e) {
+			return null;
 		}
 
 		return null;
