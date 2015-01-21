@@ -7,8 +7,8 @@ package net.swisstech.arangodb.model.wal;
 public class WalHeaders {
 
 	private boolean xArangoReplicationActive;
-	private long xArangoReplicationLastincluded;
-	private long xArangoReplicationLasttick;
+	private String xArangoReplicationLastincluded;
+	private String xArangoReplicationLasttick;
 	private boolean xArangoReplicationCheckmore;
 
 	public boolean isxArangoReplicationActive() {
@@ -19,19 +19,19 @@ public class WalHeaders {
 		this.xArangoReplicationActive = xArangoReplicationActive;
 	}
 
-	public long getxArangoReplicationLastincluded() {
+	public String getxArangoReplicationLastincluded() {
 		return xArangoReplicationLastincluded;
 	}
 
-	public void setxArangoReplicationLastincluded(long xArangoReplicationLastincluded) {
+	public void setxArangoReplicationLastincluded(String xArangoReplicationLastincluded) {
 		this.xArangoReplicationLastincluded = xArangoReplicationLastincluded;
 	}
 
-	public long getxArangoReplicationLasttick() {
+	public String getxArangoReplicationLasttick() {
 		return xArangoReplicationLasttick;
 	}
 
-	public void setxArangoReplicationLasttick(long xArangoReplicationLasttick) {
+	public void setxArangoReplicationLasttick(String xArangoReplicationLasttick) {
 		this.xArangoReplicationLasttick = xArangoReplicationLasttick;
 	}
 

@@ -1,6 +1,7 @@
 package net.swisstech.arangodb;
 
 import static net.swisstech.swissarmyknife.lang.Strings.notBlank;
+import static net.swisstech.swissarmyknife.test.Assert.assertGreaterThan;
 import static net.swisstech.swissarmyknife.test.Assert.assertNotEmpty;
 import static org.testng.Assert.assertNotNull;
 
@@ -9,6 +10,8 @@ import java.io.IOException;
 import net.swisstech.arangodb.model.Inventory;
 import net.swisstech.arangodb.model.LoggerState;
 import net.swisstech.arangodb.model.ServerId;
+import net.swisstech.arangodb.model.wal.WalDump;
+import net.swisstech.arangodb.model.wal.WalEvent;
 
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -44,5 +47,21 @@ public class WalClientTest {
 		assertNotNull(ls.getServer());
 		assertNotNull(ls.getState());
 		assertNotNull(ls.getClients());
+	}
+
+	@Test
+	@Parameters("ARANGODB_PORT")
+	public void testDump(int port) throws IOException {
+		WalClient wc = new WalClient("http://localhost:" + port);
+		WalDump wd = wc.dump("_users", 0);
+		assertNotNull(wd);
+		assertNotNull(wd.getHeaders());
+		assertNotNull(wd.getEvents());
+		int counter = 0;
+		for (WalEvent event : wd.getEvents()) {
+			counter++;
+			assertNotNull(event);
+		}
+		assertGreaterThan(counter, 0);
 	}
 }

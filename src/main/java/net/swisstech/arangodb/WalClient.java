@@ -2,11 +2,16 @@ package net.swisstech.arangodb;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 
 import net.swisstech.arangodb.model.Inventory;
 import net.swisstech.arangodb.model.LoggerState;
 import net.swisstech.arangodb.model.ServerId;
 import net.swisstech.arangodb.model.wal.WalDump;
+import net.swisstech.arangodb.model.wal.WalEventIterator;
+import net.swisstech.arangodb.model.wal.WalHeaders;
+
+import org.apache.commons.io.LineIterator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.okhttp.OkHttpClient;
@@ -39,8 +44,25 @@ public class WalClient {
 	}
 
 	/** see: https://docs.arangodb.com/HttpReplications/ReplicationDump.html */
-	public WalDump dump() throws IOException {
-		throw new UnsupportedOperationException();
+	public WalDump dump(String collection, long fromTick) throws IOException {
+		String url = baseUrl + "/_api/replication/dump?collection=" + collection + "&from=" + fromTick;
+		Request request = new Request.Builder().url(url).build();
+		Response response = httpClient.newCall(request).execute();
+		Reader reader = response.body().charStream();
+
+		LineIterator li = new LineIterator(reader);
+		WalEventIterator we = new WalEventIterator(li);
+
+		WalHeaders wh = new WalHeaders();
+		wh.setxArangoReplicationActive(Boolean.parseBoolean(response.header("x-arango-replication-active")));
+		wh.setxArangoReplicationLastincluded(response.header("x-arango-replication-lastincluded"));
+		wh.setxArangoReplicationLasttick(response.header("x-arango-replication-lasttick"));
+		wh.setxArangoReplicationCheckmore(Boolean.parseBoolean(response.header("x-arango-replication-checkmore")));
+
+		WalDump wd = new WalDump();
+		wd.setHeaders(wh);
+		wd.setEvents(we);
+		return wd;
 	}
 
 	/** see: https://docs.arangodb.com/HttpReplications/ReplicationLogger.html */

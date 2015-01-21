@@ -1,6 +1,7 @@
 package net.swisstech.arangodb.model.wal;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * a single line from a Write-Ahead-Log dump. only the 'important' fields are unmarshalled at this time and extra fields are ignored since we have no use for
@@ -11,7 +12,7 @@ public class WalEvent {
 
 	private String tick;
 	private WalEventType type;
-	private String data;
+	private JsonNode data;
 
 	public String getTick() {
 		return tick;
@@ -29,11 +30,11 @@ public class WalEvent {
 		this.type = type;
 	}
 
-	public String getData() {
+	public JsonNode getData() {
 		return data;
 	}
 
-	public void setData(String data) {
+	public void setData(JsonNode data) {
 		this.data = data;
 	}
 }
