@@ -50,7 +50,11 @@ public class WalClient {
 
 	/** see: https://docs.arangodb.com/HttpReplications/ReplicationLogger.html */
 	public LoggerState loggerState() throws IOException {
-		throw new UnsupportedOperationException();
+		String url = baseUrl + "/_api/replication/logger-state";
+		Request request = new Request.Builder().url(url).build();
+		Response response = httpClient.newCall(request).execute();
+		InputStream input = response.body().byteStream();
+		return mapper.readValue(input, LoggerState.class);
 	}
 
 	/** see: https://docs.arangodb.com/HttpReplications/OtherReplication.html */
