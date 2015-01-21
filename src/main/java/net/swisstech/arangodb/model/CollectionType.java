@@ -18,14 +18,12 @@ public enum CollectionType {
 	/** jackson calls toString() to serialize */
 	@Override
 	public String toString() {
-		System.out.println("CollectionType.toString " + id);
 		return Integer.toString(id);
 	}
 
 	/** jackson calls this method to deserialize */
 	@JsonCreator
 	public static CollectionType create(String value) {
-		System.out.println("CollectionType.create " + value);
 		if (isBlank(value)) {
 			return null;
 		}
