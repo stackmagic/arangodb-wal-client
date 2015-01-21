@@ -1,0 +1,49 @@
+
+// repositories and dependencies for buildscript itself
+buildscript {
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		jcenter()
+	}
+}
+
+plugins {
+	id "net.swisstech.eclipseenhancer" version "1.0.0"
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+// re-use repositories from buildscript
+buildscript.repositories.each { repositories.add(it) }
+
+// java version
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+// task to generate wrapper
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.2.1'
+}
+
+dependencies {
+	compile 'ch.qos.logback:logback-classic:+'
+	compile 'net.swisstech:logger:+'
+	compile 'net.swisstech:swissarmyknife:+'
+	compile 'org.slf4j:slf4j-api:+'
+
+	compile 'com.fasterxml.jackson.core:jackson-databind:+'
+	compile 'com.fasterxml.jackson.datatype:jackson-datatype-joda:+'
+
+	testCompile 'org.testng:testng:+'
+	testCompile 'org.mockito:mockito-all:+'
+}
+
+configurations {
+	all*.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+}
+
+test {
+	useTestNG()
+}
