@@ -18,6 +18,10 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
+description = 'Client for the ArangoDB Write-Ahead-Log (WAL) over HTTP'
+group       = 'net.swisstech'
+version     = '0.0.1'
+
 // re-use repositories from buildscript
 buildscript.repositories.each { repositories.add(it) }
 
