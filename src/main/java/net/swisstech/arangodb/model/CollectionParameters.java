@@ -45,7 +45,7 @@ public class CollectionParameters {
 		this.planId = planId;
 	}
 
-	public boolean isDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
 
@@ -53,7 +53,7 @@ public class CollectionParameters {
 		this.deleted = deleted;
 	}
 
-	public boolean isDoCompact() {
+	public boolean getDoCompact() {
 		return doCompact;
 	}
 
@@ -77,11 +77,11 @@ public class CollectionParameters {
 		this.name = name;
 	}
 
-	public boolean isVolatile() {
+	public boolean getIsVolatile() {
 		return isVolatile;
 	}
 
-	public void setVolatile(boolean isVolatile) {
+	public void setIsVolatile(boolean isVolatile) {
 		this.isVolatile = isVolatile;
 	}
 

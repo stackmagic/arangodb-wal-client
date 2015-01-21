@@ -1,13 +1,24 @@
 package net.swisstech.arangodb;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import net.swisstech.arangodb.model.Inventory;
 import net.swisstech.arangodb.model.LoggerState;
 import net.swisstech.arangodb.model.ServerId;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 public class WalClient {
 
 	private String baseUrl;
 	private final int chunkSize;
+
+	private final OkHttpClient httpClient = new OkHttpClient();
+	private final ObjectMapper mapper = new ObjectMapper();
 
 	public WalClient(String baseUrl, int chunkSize) {
 		this.baseUrl = baseUrl;
@@ -15,13 +26,17 @@ public class WalClient {
 	}
 
 	/** see: https://docs.arangodb.com/HttpReplications/ReplicationDump.html */
-	public Inventory inventory() {
+	public Inventory inventory() throws IOException {
 		return inventory(true);
 	}
 
 	/** see: https://docs.arangodb.com/HttpReplications/ReplicationDump.html */
-	public Inventory inventory(boolean includeSystem) {
-		throw new UnsupportedOperationException();
+	public Inventory inventory(boolean includeSystem) throws IOException {
+		String url = baseUrl + "/_api/replication/inventory?includeSystem=" + includeSystem;
+		Request request = new Request.Builder().url(url).build();
+		Response response = httpClient.newCall(request).execute();
+		InputStream input = response.body().byteStream();
+		return mapper.readValue(input, Inventory.class);
 	}
 
 	/** see: https://docs.arangodb.com/HttpReplications/ReplicationDump.html */

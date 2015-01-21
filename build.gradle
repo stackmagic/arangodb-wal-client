@@ -34,7 +34,8 @@ dependencies {
 	compile 'org.slf4j:slf4j-api:+'
 
 	compile 'com.fasterxml.jackson.core:jackson-databind:+'
-	compile 'com.fasterxml.jackson.datatype:jackson-datatype-joda:+'
+
+	compile 'com.squareup.okhttp:okhttp:+'
 
 	testCompile 'org.testng:testng:+'
 	testCompile 'org.mockito:mockito-all:+'
