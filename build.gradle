@@ -6,10 +6,13 @@ buildscript {
 		mavenCentral()
 		jcenter()
 	}
+	dependencies {
+		classpath 'net.swisstech:swissarmyknife:+'
+	}
 }
 
 plugins {
-	id "net.swisstech.eclipseenhancer" version "1.0.0"
+	id 'net.swisstech.eclipseenhancer' version '1.0.0'
 }
 
 apply plugin: 'java'
@@ -27,26 +30,51 @@ task wrapper(type: Wrapper) {
 	gradleVersion = '2.2.1'
 }
 
+// extra configuration for integration tests
+configurations {
+	intTestCompile
+}
+
+sourceSets {
+	intTest
+}
+
+// project dependencies
 dependencies {
-	compile 'ch.qos.logback:logback-classic:+'
-	compile 'net.swisstech:logger:+'
+	compile 'com.fasterxml.jackson.core:jackson-databind:+'
+	compile 'com.squareup.okhttp:okhttp:+'
+	compile 'commons-io:commons-io:+'
 	compile 'net.swisstech:swissarmyknife:+'
 	compile 'org.slf4j:slf4j-api:+'
 
-	compile 'commons-io:commons-io:+'
-
-	compile 'com.fasterxml.jackson.core:jackson-databind:+'
-
-	compile 'com.squareup.okhttp:okhttp:+'
-
+	testCompile 'ch.qos.logback:logback-classic:+'
 	testCompile 'org.testng:testng:+'
 	testCompile 'org.mockito:mockito-all:+'
+
+	intTestCompile 'ch.qos.logback:logback-classic:+'
+	intTestCompile 'org.testng:testng:+'
+	intTestCompile 'org.mockito:mockito-all:+'
 }
 
+// we no likey log4j
 configurations {
 	all*.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
 }
 
+// normal unit tests
 test {
 	useTestNG()
 }
+
+// setup for integration tests, requires a local installation of arangodb
+ext.arangoDbPort = new Integer(18529)
+ext.arangoDataDir = "/tmp/arangodb_wal_client_tests_${System.currentTimeMillis()}"
+
+task('intTest', type: Test, dependsOn: 'intTestClasses') {
+	useTestNG()
+	group          = 'verification'
+	testSrcDirs    = sourceSets.intTest.java.srcDirs as List
+	testClassesDir = sourceSets.intTest.output.classesDir
+	classpath      = sourceSets.intTest.runtimeClasspath
+}
+
