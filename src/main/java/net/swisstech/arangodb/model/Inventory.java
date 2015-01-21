@@ -3,7 +3,7 @@ package net.swisstech.arangodb.model;
 import java.util.List;
 
 /** https://docs.arangodb.com/HttpReplications/ReplicationDump.html */
-public class Inventory extends LoggerState {
+public class Inventory extends AbstractInfo {
 
 	private List<ArangoDbCollection> collections;
 	private String tick;

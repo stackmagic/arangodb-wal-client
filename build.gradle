@@ -36,7 +36,10 @@ configurations {
 }
 
 sourceSets {
-	intTest
+	intTest {
+		compileClasspath = sourceSets.main.output + configurations.testRuntime
+		runtimeClasspath = sourceSets.main.output + configurations.testRuntime + output
+	}
 }
 
 // project dependencies
@@ -76,6 +79,7 @@ task('intTest', type: Test, dependsOn: 'intTestClasses') {
 	testSrcDirs    = sourceSets.intTest.java.srcDirs as List
 	testClassesDir = sourceSets.intTest.output.classesDir
 	classpath      = sourceSets.intTest.runtimeClasspath
+	systemProperty 'ARANGODB_PORT', project.arangoDbPort
 }
 
 afterEvaluate {
