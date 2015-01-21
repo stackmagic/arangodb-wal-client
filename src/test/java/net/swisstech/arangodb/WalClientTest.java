@@ -11,14 +11,14 @@ public class WalClientTest {
 
 	@Test
 	public void testInventory() throws IOException {
-		WalClient wc = new WalClient("http://localhost:8529", Integer.MAX_VALUE);
+		WalClient wc = new WalClient("http://localhost:8529");
 		Inventory i = wc.inventory();
 		System.out.println(i);
 	}
 
 	@Test
 	public void testServerId() throws IOException {
-		WalClient wc = new WalClient("http://localhost:8529", Integer.MAX_VALUE);
+		WalClient wc = new WalClient("http://localhost:8529");
 		ServerId i = wc.serverId();
 		System.out.println(i);
 	}
