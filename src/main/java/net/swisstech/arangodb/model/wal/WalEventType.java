@@ -4,6 +4,7 @@ import static net.swisstech.swissarmyknife.lang.Strings.isBlank;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
+/** a WAL event. the types model exactly what arangodb returns. see: https://docs.arangodb.com/HttpReplications/ReplicationDump.html */
 public enum WalEventType {
 
 	DOCUMENT_INSERT_UPDATE(2300), //

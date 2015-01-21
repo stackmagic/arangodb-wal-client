@@ -1,5 +1,9 @@
 package net.swisstech.arangodb.model.wal;
 
+/**
+ * arangodb specific response headers for calling /dump or /logger-follow. this allows to pace the client, and indicates wheter or not one should re-check for
+ * more data immediately.
+ */
 public class WalHeaders {
 
 	private boolean xArangoReplicationActive;

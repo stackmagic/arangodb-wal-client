@@ -7,6 +7,11 @@ import org.apache.commons.io.LineIterator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * iterates over a WAL dump line by line, and unmarshalls each line into an event. This uses a LineIterator which in turn uses a BufferedReader to read the
+ * dump. The intention of this being that we can stream data from the server in large chunks and don't have to load the entire dump into memory before starting
+ * to process it line by line.
+ */
 public class WalEventIterator implements Iterator<WalEvent>, Iterable<WalEvent> {
 
 	private final ObjectMapper mapper = new ObjectMapper();
