@@ -12,17 +12,16 @@ include = JsonTypeInfo.As.PROPERTY, //
 property = "type" //
 )
 @JsonSubTypes({ //
-@Type(value = CapIndex.class, name = "cap"), //
-	@Type(value = FulltextIndex.class, name = "fulltext"), //
-	@Type(value = Geo1Index.class, name = "geo1"), //
-	@Type(value = Geo2Index.class, name = "geo2"), //
-	@Type(value = HashIndex.class, name = "hash"), //
-	@Type(value = SkiplistIndex.class, name = "skiplist"), //
+@Type(value = CapIndex.class, name = IndexTypes.CAP), //
+	@Type(value = FulltextIndex.class, name = IndexTypes.FULLTEXT), //
+	@Type(value = Geo1Index.class, name = IndexTypes.GEO1), //
+	@Type(value = Geo2Index.class, name = IndexTypes.GEO2), //
+	@Type(value = HashIndex.class, name = IndexTypes.HASH), //
+	@Type(value = SkiplistIndex.class, name = IndexTypes.SKIPLIST), //
 })
 public abstract class AbstractIndex {
 
 	private String id;
-	private String type;
 	private boolean unique;
 	private List<String> fields;
 
@@ -34,13 +33,7 @@ public abstract class AbstractIndex {
 		this.id = id;
 	}
 
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
+	public abstract String getType();
 
 	public boolean isUnique() {
 		return unique;
@@ -60,6 +53,6 @@ public abstract class AbstractIndex {
 
 	@Override
 	public String toString() {
-		return "Index of type " + type;
+		return "Index of type " + getType();
 	}
 }

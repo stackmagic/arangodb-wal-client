@@ -5,6 +5,11 @@ public class FulltextIndex extends AbstractIndex {
 
 	private long minLength;
 
+	@Override
+	public String getType() {
+		return IndexTypes.FULLTEXT;
+	}
+
 	public long getMinLength() {
 		return minLength;
 	}

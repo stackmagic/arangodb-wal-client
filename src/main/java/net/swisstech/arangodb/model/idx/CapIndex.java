@@ -6,6 +6,11 @@ public class CapIndex extends AbstractIndex {
 	private long size;
 	private long byteSize;
 
+	@Override
+	public String getType() {
+		return IndexTypes.CAP;
+	}
+
 	public long getSize() {
 		return size;
 	}

@@ -1,7 +1,7 @@
 package net.swisstech.arangodb.model.idx;
 
 /** see: https://docs.arangodb.com/IndexHandling/Geo.html */
-public class AbstractGeoIndex extends AbstractIndex {
+public abstract class AbstractGeoIndex extends AbstractIndex {
 
 	private boolean constraint;
 	private boolean ignoreNull;

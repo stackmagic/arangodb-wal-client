@@ -5,6 +5,11 @@ public class Geo1Index extends AbstractGeoIndex {
 
 	private boolean geoJson;
 
+	@Override
+	public String getType() {
+		return IndexTypes.GEO1;
+	}
+
 	public boolean isGeoJson() {
 		return geoJson;
 	}
