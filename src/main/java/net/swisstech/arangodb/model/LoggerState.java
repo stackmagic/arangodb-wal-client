@@ -22,6 +22,11 @@ public class LoggerState {
 		this.server = server;
 	}
 
+	@Override
+	public String toString() {
+		return "LoggerState server: " + server + " state: " + state;
+	}
+
 	/** see: https://docs.arangodb.com/HttpReplications/ReplicationLogger.html */
 	public static class State {
 
@@ -61,6 +66,11 @@ public class LoggerState {
 		public void setTime(String time) {
 			this.time = time;
 		}
+
+		@Override
+		public String toString() {
+			return "State running: " + running;
+		}
 	}
 
 	/** see: https://docs.arangodb.com/HttpReplications/ReplicationLogger.html */
@@ -74,6 +84,11 @@ public class LoggerState {
 
 		public void setVersion(String version) {
 			this.version = version;
+		}
+
+		@Override
+		public String toString() {
+			return "Server version: " + version + " serverId: " + getServerId();
 		}
 	}
 }

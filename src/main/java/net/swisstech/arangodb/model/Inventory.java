@@ -23,4 +23,13 @@ public class Inventory extends LoggerState {
 	public void setTick(String tick) {
 		this.tick = tick;
 	}
+
+	@Override
+	public String toString() {
+		String len = "<null>";
+		if (collections != null) {
+			len = Integer.toString(collections.size());
+		}
+		return "Inventory: " + len + " collections";
+	}
 }

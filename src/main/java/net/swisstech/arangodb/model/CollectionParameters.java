@@ -92,4 +92,13 @@ public class CollectionParameters {
 	public void setWaitForSync(boolean waitForSync) {
 		this.waitForSync = waitForSync;
 	}
+
+	@Override
+	public String toString() {
+		String typeName = "<null>";
+		if (type != null) {
+			typeName = type.name();
+		}
+		return "CollectionParameters name: " + name + " type: " + typeName;
+	}
 }

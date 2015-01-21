@@ -57,4 +57,9 @@ public abstract class AbstractIndex {
 	public void setFields(List<String> fields) {
 		this.fields = fields;
 	}
+
+	@Override
+	public String toString() {
+		return "Index of type " + type;
+	}
 }

@@ -24,4 +24,13 @@ public class ArangoDbCollection {
 	public void setIndexes(List<AbstractIndex> indexes) {
 		this.indexes = indexes;
 	}
+
+	@Override
+	public String toString() {
+		String name = "<null>";
+		if (parameters != null) {
+			name = parameters.getName();
+		}
+		return "Collection " + name;
+	}
 }

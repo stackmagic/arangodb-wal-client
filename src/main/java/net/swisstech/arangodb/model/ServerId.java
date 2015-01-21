@@ -12,4 +12,9 @@ public class ServerId {
 	public void setServerId(String serverId) {
 		this.serverId = serverId;
 	}
+
+	@Override
+	public String toString() {
+		return "serverId " + serverId;
+	}
 }
