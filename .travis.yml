@@ -9,7 +9,7 @@ jdk:
 before_install:
   - sudo wget https://www.arangodb.com/repositories/arangodb2/Debian_7.0/Release.key
   - sudo apt-key add - < Release.key
-  - sudo echo 'deb https://www.arangodb.com/repositories/arangodb2/Debian_7.0/ /' >> /etc/apt/sources.list.d/arangodb.list
-  - sudo apt-get update
+  - sudo echo 'deb https://www.arangodb.com/repositories/arangodb2/Debian_7.0/ /' | sudo tee -a /etc/apt/sources.list
+  - sudo apt-get update -qq
   - sudo apt-get install arangodb=2.4.1
   - sudo service arangodb stop
