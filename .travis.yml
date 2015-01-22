@@ -13,3 +13,6 @@ before_script:
   - sudo apt-get update -q
   - sudo apt-get install arangodb=2.4.1
   - sudo service arangodb stop
+
+script:
+  - ./gradlew intTest
