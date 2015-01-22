@@ -79,6 +79,7 @@ ext.arangoDataDir = "/tmp/arangodb_wal_client_tests_${System.currentTimeMillis()
 
 task('intTest', type: Test, dependsOn: 'intTestClasses') {
 	useTestNG()
+	testLogging.showStandardStreams = true
 	group          = 'verification'
 	testSrcDirs    = sourceSets.intTest.java.srcDirs as List
 	testClassesDir = sourceSets.intTest.output.classesDir
