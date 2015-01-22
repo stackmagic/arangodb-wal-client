@@ -19,7 +19,7 @@ import net.swisstech.arangodb.model.wal.WalHeaders;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-public class WalClientTest {
+public class SimpleWalClientTest {
 
 	@Test
 	@Parameters("ARANGODB_PORT")
