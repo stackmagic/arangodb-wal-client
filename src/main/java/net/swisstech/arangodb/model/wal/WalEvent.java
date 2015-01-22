@@ -10,9 +10,18 @@ import com.fasterxml.jackson.databind.JsonNode;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WalEvent {
 
+	private String key;
 	private String tick;
 	private WalEventType type;
 	private JsonNode data;
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
 
 	public String getTick() {
 		return tick;
