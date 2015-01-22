@@ -49,7 +49,6 @@ public class SimpleWalClientTest {
 		assertNotNull(ls);
 		assertNotNull(ls.getServer());
 		assertNotNull(ls.getState());
-		assertNotNull(ls.getClients());
 	}
 
 	@Test
