@@ -12,15 +12,15 @@ buildscript {
 }
 
 plugins {
+	id 'java'
+	id 'eclipse'
+	id 'project-report'
 	id 'net.swisstech.eclipseenhancer' version '1.0.0'
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-
 description = 'Client for the ArangoDB Write-Ahead-Log (WAL) over HTTP'
 group       = 'net.swisstech'
-version     = '0.0.1'
+version     = '1.0.0'
 
 // re-use repositories from buildscript
 buildscript.repositories.each { repositories.add(it) }
@@ -47,25 +47,29 @@ sourceSets {
 }
 
 // project dependencies
+ext.versions = [
+	  jackson        : '2.5.0'
+	, okhttp         : '2.2.0'
+	, commons_io     : '2.4'
+	, swissarmyknife : '1.1.8'
+	, logback_classic: '1.1.2'
+	, testng         : '6.8.17'
+	, mockito        : '1.10.19'
+]
+
 dependencies {
-	compile 'com.fasterxml.jackson.core:jackson-databind:+'
-	compile 'com.squareup.okhttp:okhttp:+'
-	compile 'commons-io:commons-io:+'
-	compile 'net.swisstech:swissarmyknife:+'
-	compile 'org.slf4j:slf4j-api:+'
+	compile        "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"
+	compile        "com.squareup.okhttp:okhttp:${versions.okhttp}"
+	compile        "commons-io:commons-io:${versions.commons_io}"
+	compile        "net.swisstech:swissarmyknife:${versions.swissarmyknife}"
 
-	testCompile 'ch.qos.logback:logback-classic:+'
-	testCompile 'org.testng:testng:+'
-	testCompile 'org.mockito:mockito-all:+'
+	testCompile    "ch.qos.logback:logback-classic:${versions.logback_classic}"
+	testCompile    "org.testng:testng:${versions.testng}"
+	testCompile    "org.mockito:mockito-all:${versions.mockito}"
 
-	intTestCompile 'ch.qos.logback:logback-classic:+'
-	intTestCompile 'org.testng:testng:+'
-	intTestCompile 'org.mockito:mockito-all:+'
-}
-
-// we no likey log4j
-configurations {
-	all*.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+	intTestCompile "ch.qos.logback:logback-classic:${versions.logback_classic}"
+	intTestCompile "org.testng:testng:${versions.testng}"
+	intTestCompile "org.mockito:mockito-all:${versions.mockito}"
 }
 
 // normal unit tests
