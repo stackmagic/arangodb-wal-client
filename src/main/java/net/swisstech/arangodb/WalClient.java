@@ -29,6 +29,11 @@ public class WalClient {
 		this.baseUrl = baseUrl;
 	}
 
+	public WalClient(String baseUrl, String user, String pass) {
+		this(baseUrl);
+		httpClient.setAuthenticator(new UsernamePasswordAuthenticator(user, pass));
+	}
+
 	/** see: https://docs.arangodb.com/HttpReplications/ReplicationDump.html */
 	public Inventory inventory() throws IOException {
 		return inventory(true);
