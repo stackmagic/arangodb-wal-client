@@ -42,4 +42,9 @@ public class WalHeaders {
 	public void setReplicationCheckmore(Boolean replicationCheckmore) {
 		this.replicationCheckmore = replicationCheckmore;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("active: %s / lastIncluded: %s / lastTick: %s / checkMore: %s", replicationActive, replicationLastincluded, replicationLasttick, replicationCheckmore);
+	}
 }
