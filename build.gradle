@@ -23,7 +23,7 @@ plugins {
 
 description = 'Client for the ArangoDB Write-Ahead-Log (WAL) over HTTP'
 group       = 'net.swisstech'
-version     = '1.0.1'
+version     = '1.0.2'
 
 // re-use repositories from buildscript
 buildscript.repositories.each { repositories.add(it) }
