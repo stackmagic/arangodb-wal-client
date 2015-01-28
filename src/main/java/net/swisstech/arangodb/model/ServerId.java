@@ -1,7 +1,8 @@
 package net.swisstech.arangodb.model;
 
+
 /** see: https://docs.arangodb.com/HttpReplications/OtherReplication.html */
-public class ServerId {
+public class ServerId extends AbstractResponse {
 
 	private String serverId;
 

@@ -1,5 +1,7 @@
 package net.swisstech.arangodb;
 
+import static net.swisstech.swissarmyknife.lang.Longs.positive;
+import static net.swisstech.swissarmyknife.lang.Longs.zero;
 import static net.swisstech.swissarmyknife.lang.Strings.notBlank;
 import static net.swisstech.swissarmyknife.lang.Threads.sleepFor;
 import static net.swisstech.swissarmyknife.test.Assert.assertSameSize;
@@ -81,7 +83,7 @@ public class ExtendedWalClientTest {
 		 * start reading write-ahead-log
 		 */
 
-		readWriteAheadLog(wc, cn, keysReceived, 10_000);
+		long lastTick = readWriteAheadLog(wc, cn, keysReceived, 10_000, 0);
 
 		/*
 		 * stop loading documents
@@ -93,7 +95,7 @@ public class ExtendedWalClientTest {
 		 * write-ahead-log should settle and we should have received all documents
 		 */
 
-		readWriteAheadLog(wc, cn, keysReceived, 10_000);
+		readWriteAheadLog(wc, cn, keysReceived, 10_000, lastTick);
 
 		assertSameSize(keysCreated, keysReceived);
 		assertTrue(keysCreated.containsAll(keysReceived));
@@ -112,19 +114,20 @@ public class ExtendedWalClientTest {
 		}
 	}
 
-	private void readWriteAheadLog(WalClient wc, String cn, Set<String> keysFromWal, long duration) throws IOException {
-		long lastTick = 0;
+	private long readWriteAheadLog(WalClient wc, String cn, Set<String> keysFromWal, long duration, long lastTick) throws IOException {
 		long noCheckMoreCtr = 0;
 		long end = System.currentTimeMillis() + duration;
 		while (end > System.currentTimeMillis()) {
 			LOG.info("Loading WAL from tick: %d", lastTick);
 			WalDump dump = wc.dump(cn, lastTick);
+
 			WalEventIterator events = dump.getEvents();
 			int ctr = 0;
 			for (WalEvent we : events) {
 				ctr++;
-				notBlank(we.getKey());
-				keysFromWal.add(we.getKey());
+				String key = we.getKey();
+				notBlank(key);
+				assertTrue(keysFromWal.add(key), key);
 				notBlank(we.getTick());
 				assertNotNull(we.getData());
 				assertEquals(we.getType(), WalEventType.DOCUMENT_INSERT_UPDATE);
@@ -143,13 +146,24 @@ public class ExtendedWalClientTest {
 				noCheckMoreCtr++;
 			}
 
-			lastTick = Long.parseLong(wh.getReplicationLastincluded());
+			LOG.info("Response Headers: %s", wh);
+			long lastTickHeader = Long.parseLong(wh.getReplicationLastincluded());
+			if (ctr == 0) {
+				assertEquals(dump.getResponseCode(), 204);
+				zero(lastTickHeader);
+			}
+			else {
+				assertEquals(dump.getResponseCode(), 200);
+				lastTick = positive(lastTickHeader);
+			}
 
 			// abort if there was no new data for a while
 			if (noCheckMoreCtr >= 3) {
 				break;
 			}
 		}
+
+		return lastTick;
 	}
 
 	public static class DocLoader extends Thread {

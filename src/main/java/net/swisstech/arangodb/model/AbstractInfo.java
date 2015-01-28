@@ -1,6 +1,7 @@
 package net.swisstech.arangodb.model;
 
-public abstract class AbstractInfo {
+
+public abstract class AbstractInfo extends AbstractResponse {
 
 	private State state;
 

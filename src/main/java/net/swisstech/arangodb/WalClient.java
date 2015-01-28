@@ -45,7 +45,9 @@ public class WalClient {
 		Request request = new Request.Builder().url(url).build();
 		Response response = httpClient.newCall(request).execute();
 		InputStream input = response.body().byteStream();
-		return mapper.readValue(input, Inventory.class);
+		Inventory inventory = mapper.readValue(input, Inventory.class);
+		inventory.setResponseCode(response.code());
+		return inventory;
 	}
 
 	/** see: https://docs.arangodb.com/HttpReplications/ReplicationDump.html */
@@ -65,6 +67,7 @@ public class WalClient {
 		wh.setReplicationCheckmore(Boolean.parseBoolean(response.header("x-arango-replication-checkmore")));
 
 		WalDump wd = new WalDump();
+		wd.setResponseCode(response.code());
 		wd.setHeaders(wh);
 		wd.setEvents(we);
 		return wd;
@@ -81,7 +84,9 @@ public class WalClient {
 		Request request = new Request.Builder().url(url).build();
 		Response response = httpClient.newCall(request).execute();
 		InputStream input = response.body().byteStream();
-		return mapper.readValue(input, LoggerState.class);
+		LoggerState loggerState = mapper.readValue(input, LoggerState.class);
+		loggerState.setResponseCode(response.code());
+		return loggerState;
 	}
 
 	/** see: https://docs.arangodb.com/HttpReplications/OtherReplication.html */
@@ -90,6 +95,8 @@ public class WalClient {
 		Request request = new Request.Builder().url(url).build();
 		Response response = httpClient.newCall(request).execute();
 		InputStream input = response.body().byteStream();
-		return mapper.readValue(input, ServerId.class);
+		ServerId serverId = mapper.readValue(input, ServerId.class);
+		serverId.setResponseCode(response.code());
+		return serverId;
 	}
 }

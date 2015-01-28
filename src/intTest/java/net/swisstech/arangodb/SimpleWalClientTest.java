@@ -3,6 +3,7 @@ package net.swisstech.arangodb;
 import static net.swisstech.swissarmyknife.lang.Strings.notBlank;
 import static net.swisstech.swissarmyknife.test.Assert.assertGreaterThan;
 import static net.swisstech.swissarmyknife.test.Assert.assertNotEmpty;
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
@@ -27,6 +28,7 @@ public class SimpleWalClientTest {
 		WalClient wc = new WalClient("http://localhost:" + port);
 		Inventory inv = wc.inventory();
 		assertNotNull(inv);
+		assertEquals(inv.getResponseCode(), 200);
 		assertNotEmpty(inv.getCollections());
 		assertNotNull(inv.getState());
 		notBlank(inv.getTick());
@@ -38,6 +40,7 @@ public class SimpleWalClientTest {
 		WalClient wc = new WalClient("http://localhost:" + port);
 		ServerId sid = wc.serverId();
 		assertNotNull(sid);
+		assertEquals(sid.getResponseCode(), 200);
 		notBlank(sid.getServerId());
 	}
 
@@ -47,6 +50,7 @@ public class SimpleWalClientTest {
 		WalClient wc = new WalClient("http://localhost:" + port);
 		LoggerState ls = wc.loggerState();
 		assertNotNull(ls);
+		assertEquals(ls.getResponseCode(), 200);
 		assertNotNull(ls.getServer());
 		assertNotNull(ls.getState());
 	}
@@ -57,6 +61,7 @@ public class SimpleWalClientTest {
 		WalClient wc = new WalClient("http://localhost:" + port);
 		WalDump wd = wc.dump("_users", 0);
 		assertNotNull(wd);
+		assertEquals(wd.getResponseCode(), 200);
 
 		WalHeaders headers = wd.getHeaders();
 		assertNotNull(headers);
