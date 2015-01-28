@@ -44,6 +44,8 @@ public class ExtendedWalClientTest {
 		 * collection must not yet exist
 		 */
 
+		assertEquals(wc.dump(cn, 0).getResponseCode(), 404);
+
 		for (ArangoDbCollection coll : wc.inventory(false).getCollections()) {
 			if (cn.equals(coll.getParameters().getName())) {
 				fail("SETUP collection " + cn + " already exists but it shouldn't");
@@ -60,6 +62,8 @@ public class ExtendedWalClientTest {
 		/*
 		 * collection must now exist
 		 */
+
+		assertEquals(wc.dump(cn, 0).getResponseCode(), 204);
 
 		boolean created = false;
 		for (ArangoDbCollection coll : wc.inventory(false).getCollections()) {
