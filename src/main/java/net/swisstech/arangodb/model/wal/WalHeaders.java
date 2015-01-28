@@ -7,8 +7,7 @@ package net.swisstech.arangodb.model.wal;
 public class WalHeaders {
 
 	private Boolean replicationActive;
-	private String replicationLastincluded;
-	private String replicationLasttick;
+	private long replicationLastincluded = 0;
 	private Boolean replicationCheckmore;
 
 	public Boolean getReplicationActive() {
@@ -19,20 +18,12 @@ public class WalHeaders {
 		this.replicationActive = replicationActive;
 	}
 
-	public String getReplicationLastincluded() {
+	public long getReplicationLastincluded() {
 		return replicationLastincluded;
 	}
 
-	public void setReplicationLastincluded(String replicationLastincluded) {
+	public void setReplicationLastincluded(long replicationLastincluded) {
 		this.replicationLastincluded = replicationLastincluded;
-	}
-
-	public String getReplicationLasttick() {
-		return replicationLasttick;
-	}
-
-	public void setReplicationLasttick(String replicationLasttick) {
-		this.replicationLasttick = replicationLasttick;
 	}
 
 	public Boolean getReplicationCheckmore() {
@@ -45,6 +36,6 @@ public class WalHeaders {
 
 	@Override
 	public String toString() {
-		return String.format("active: %s / lastIncluded: %s / lastTick: %s / checkMore: %s", replicationActive, replicationLastincluded, replicationLasttick, replicationCheckmore);
+		return String.format("active: %s / lastIncluded: %d / checkMore: %s", replicationActive, replicationLastincluded, replicationCheckmore);
 	}
 }

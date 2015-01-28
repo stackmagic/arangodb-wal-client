@@ -5,7 +5,6 @@ import static net.swisstech.swissarmyknife.test.Assert.assertGreaterThan;
 import static net.swisstech.swissarmyknife.test.Assert.assertNotEmpty;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
 
 import java.io.IOException;
 
@@ -68,7 +67,6 @@ public class SimpleWalClientTest {
 		assertNotNull(headers.getReplicationActive());
 		assertNotNull(headers.getReplicationCheckmore());
 		assertNotNull(headers.getReplicationLastincluded());
-		assertNull(headers.getReplicationLasttick());
 
 		WalEventIterator events = wd.getEvents();
 		assertNotNull(events);

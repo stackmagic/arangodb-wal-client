@@ -151,7 +151,7 @@ public class ExtendedWalClientTest {
 			}
 
 			LOG.info("Response Headers: %s", wh);
-			long lastTickHeader = Long.parseLong(wh.getReplicationLastincluded());
+			long lastTickHeader = wh.getReplicationLastincluded();
 			if (ctr == 0) {
 				assertEquals(dump.getResponseCode(), 204);
 				zero(lastTickHeader);

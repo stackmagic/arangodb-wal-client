@@ -1,5 +1,8 @@
 package net.swisstech.arangodb;
 
+import static java.lang.Boolean.parseBoolean;
+import static net.swisstech.swissarmyknife.lang.Numbers.tryParseLong;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -60,11 +63,14 @@ public class WalClient {
 		LineIterator li = new LineIterator(reader);
 		WalEventIterator we = new WalEventIterator(li);
 
+		String active = response.header("x-arango-replication-active");
+		String lastInc = response.header("x-arango-replication-lastincluded");
+		String checkMore = response.header("x-arango-replication-checkmore");
+
 		WalHeaders wh = new WalHeaders();
-		wh.setReplicationActive(Boolean.parseBoolean(response.header("x-arango-replication-active")));
-		wh.setReplicationLastincluded(response.header("x-arango-replication-lastincluded"));
-		wh.setReplicationLasttick(response.header("x-arango-replication-lasttick"));
-		wh.setReplicationCheckmore(Boolean.parseBoolean(response.header("x-arango-replication-checkmore")));
+		wh.setReplicationActive(parseBoolean(active));
+		wh.setReplicationLastincluded(tryParseLong(lastInc, 0l));
+		wh.setReplicationCheckmore(parseBoolean(checkMore));
 
 		WalDump wd = new WalDump();
 		wd.setResponseCode(response.code());
