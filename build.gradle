@@ -13,6 +13,7 @@ buildscript {
 
 plugins {
 	id 'java'
+	id 'jacoco'
 	id 'eclipse'
 	id 'maven-publish'
 	id 'project-report'
@@ -127,6 +128,10 @@ dependencies {
 // normal unit tests
 test {
 	useTestNG()
+
+	jacoco {
+		destinationFile = file("${buildDir}/jacoco.ut.exec")
+	}
 }
 
 // setup for integration tests, requires a local installation of arangodb
@@ -141,8 +146,22 @@ task('intTest', type: Test, dependsOn: 'intTestClasses') {
 	testClassesDir = sourceSets.intTest.output.classesDir
 	classpath      = sourceSets.intTest.runtimeClasspath
 	systemProperty 'ARANGODB_PORT', project.arangoDbPort
+
+	jacoco {
+		destinationFile = file("${buildDir}/jacoco.it.exec")
+	}
 }
 
+jacocoTestReport {
+	reports.html.destination = "${reportsDir}/jacoco/${name}"
+}
+task('jacocoIntTestReport', type: JacocoReport) {
+	reports.html.destination = "${reportsDir}/jacoco/${name}"
+	executionData intTest
+	sourceSets sourceSets.main
+}
+
+// start & stop arangodb
 afterEvaluate {
 
 	task('startArangoDb') << {
