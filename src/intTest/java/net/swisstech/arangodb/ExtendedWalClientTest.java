@@ -2,6 +2,7 @@ package net.swisstech.arangodb;
 
 import static net.swisstech.swissarmyknife.lang.Longs.positive;
 import static net.swisstech.swissarmyknife.lang.Longs.zero;
+import static net.swisstech.swissarmyknife.lang.Longs.zeroOrPositive;
 import static net.swisstech.swissarmyknife.lang.Strings.notBlank;
 import static net.swisstech.swissarmyknife.lang.Threads.sleepFor;
 import static net.swisstech.swissarmyknife.test.Assert.assertSameSize;
@@ -132,7 +133,8 @@ public class ExtendedWalClientTest {
 				String key = we.getKey();
 				notBlank(key);
 				assertTrue(keysFromWal.add(key), key);
-				notBlank(we.getTick());
+				assertNotNull(we.getTick());
+				zeroOrPositive(we.getTick());
 				assertNotNull(we.getData());
 				assertEquals(we.getType(), WalEventType.DOCUMENT_INSERT_UPDATE);
 			}
