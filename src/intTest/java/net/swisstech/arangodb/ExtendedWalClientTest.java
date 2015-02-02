@@ -133,6 +133,7 @@ public class ExtendedWalClientTest {
 				String key = we.getKey();
 				notBlank(key);
 				assertTrue(keysFromWal.add(key), key);
+				assertNotNull(we.getRev());
 				assertNotNull(we.getTick());
 				zeroOrPositive(we.getTick());
 				assertNotNull(we.getData());

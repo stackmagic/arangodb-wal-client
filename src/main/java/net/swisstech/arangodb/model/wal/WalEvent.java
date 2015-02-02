@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class WalEvent {
 
 	private String key;
+	private String rev;
 	private Long tick;
 	private WalEventType type;
 	private JsonNode data;
@@ -21,6 +22,14 @@ public class WalEvent {
 
 	public void setKey(String key) {
 		this.key = key;
+	}
+
+	public String getRev() {
+		return rev;
+	}
+
+	public void setRev(String rev) {
+		this.rev = rev;
 	}
 
 	public Long getTick() {
