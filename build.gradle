@@ -135,7 +135,7 @@ test {
 }
 
 // setup for integration tests, requires a local installation of arangodb
-ext.arangoDbPort = new Integer(18529)
+ext.arangoDbPort  = 18529
 ext.arangoDataDir = "/tmp/arangodb_wal_client_tests_${System.currentTimeMillis()}"
 
 task('intTest', type: Test, dependsOn: 'intTestClasses') {
