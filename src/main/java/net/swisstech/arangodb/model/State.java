@@ -1,4 +1,3 @@
-// Copyright (C) Layzapp AG. All Rights Reserved.
 package net.swisstech.arangodb.model;
 
 /** see: https://docs.arangodb.com/HttpReplications/ReplicationLogger.html */
