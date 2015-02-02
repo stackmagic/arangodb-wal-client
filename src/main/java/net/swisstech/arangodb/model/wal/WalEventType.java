@@ -66,4 +66,8 @@ public enum WalEventType {
 
 		return UNKNOWN;
 	}
+
+	public int getId() {
+		return id;
+	}
 }
