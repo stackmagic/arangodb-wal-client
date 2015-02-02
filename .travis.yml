@@ -13,7 +13,7 @@ before_script:
   - sudo apt-key add - < Release.key
   - sudo echo 'deb https://www.arangodb.com/repositories/arangodb2/Debian_7.0/ /' | sudo tee -a /etc/apt/sources.list
   - sudo apt-get -q update
-  - sudo apt-get -q install arangodb=2.4.1
+  - sudo apt-get -q install arangodb
   - sudo service arangodb stop
 
 script:
