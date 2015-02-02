@@ -26,7 +26,7 @@ public class WalEventIteratorTest {
 
 		WalEvent we1 = we.next();
 		assertEquals(we1.getTick().longValue(), 123);
-		assertEquals(we1.getType(), WalEventType.DOCUMENT_INSERT_UPDATE);
+		assertEquals(we1.getType(), WalEventType.REPLICATION_MARKER_DOCUMENT);
 		assertNotNull(we1.getData());
 		assertEquals(we1.getData().toString(), "{\"_key\":\"456\",\"_rev\":\"789\",\"hello\":\"world\"}");
 

@@ -136,7 +136,7 @@ public class ExtendedWalClientTest {
 				assertNotNull(we.getTick());
 				zeroOrPositive(we.getTick());
 				assertNotNull(we.getData());
-				assertEquals(we.getType(), WalEventType.DOCUMENT_INSERT_UPDATE);
+				assertEquals(we.getType(), WalEventType.REPLICATION_MARKER_DOCUMENT);
 			}
 
 			LOG.info("Received %d events from WAL", ctr);
