@@ -9,9 +9,8 @@ jdk:
 before_script:
   - sudo apt-get -q update
   - sudo apt-get -q install apt-transport-https
-  - sudo wget https://www.arangodb.com/repositories/arangodb2/Debian_7.0/Release.key
-  - sudo apt-key add - < Release.key
-  - sudo echo 'deb https://www.arangodb.com/repositories/arangodb2/Debian_7.0/ /' | sudo tee -a /etc/apt/sources.list
+  - wget -qO - https://www.arangodb.com/repositories/arangodb2/Debian_7.0/Release.key | sudo apt-key add -
+  - echo 'deb https://www.arangodb.com/repositories/arangodb2/Debian_7.0/ /'          | sudo tee -a /etc/apt/sources.list
   - sudo apt-get -q update
   - sudo apt-get -q install arangodb
   - sudo service arangodb stop
