@@ -76,6 +76,8 @@ public class MgmtClient {
 
 	public static final class CreateCollectionResponse {
 
+		private String errorMessage;
+		private int errorNum;
 		private String id;
 		private String name;
 		private boolean waitForSync;
@@ -85,6 +87,22 @@ public class MgmtClient {
 		private CollectionType type;
 		private boolean error;
 		private int code;
+
+		public String getErrorMessage() {
+			return errorMessage;
+		}
+
+		public void setErrorMessage(String errorMessage) {
+			this.errorMessage = errorMessage;
+		}
+
+		public int getErrorNum() {
+			return errorNum;
+		}
+
+		public void setErrorNum(int errorNum) {
+			this.errorNum = errorNum;
+		}
 
 		public String getId() {
 			return id;
