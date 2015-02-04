@@ -73,6 +73,14 @@ public class MgmtClient {
 		return mapper.readValue(input, DeleteDocumentResponse.class);
 	}
 
+	public <T> T get(String collectionName, String key, Class<T> clazz) throws IOException {
+		String url = baseUrl + "/_api/document/" + collectionName + "/" + key;
+		Request request = new Request.Builder().url(url).get().build();
+		Response response = httpClient.newCall(request).execute();
+		InputStream input = response.body().byteStream();
+		return mapper.readValue(input, clazz);
+	}
+
 	public static final class CreateCollectionRequest {
 
 		private String name;
