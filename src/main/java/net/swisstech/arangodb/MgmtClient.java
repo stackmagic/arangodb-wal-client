@@ -55,6 +55,24 @@ public class MgmtClient {
 		return mapper.readValue(input, CreateDocumentResponse.class);
 	}
 
+	public CreateDocumentResponse update(String collectionName, String key, Object document) throws IOException {
+		String url = baseUrl + "/_api/document/" + collectionName + "/" + key;
+		String data = mapper.writeValueAsString(document);
+		RequestBody body = RequestBody.create(MEDIATYPE_JSON, data);
+		Request request = new Request.Builder().url(url).put(body).build();
+		Response response = httpClient.newCall(request).execute();
+		InputStream input = response.body().byteStream();
+		return mapper.readValue(input, CreateDocumentResponse.class);
+	}
+
+	public DeleteDocumentResponse delete(String collectionName, String key) throws IOException {
+		String url = baseUrl + "/_api/document/" + collectionName + "/" + key;
+		Request request = new Request.Builder().url(url).delete().build();
+		Response response = httpClient.newCall(request).execute();
+		InputStream input = response.body().byteStream();
+		return mapper.readValue(input, DeleteDocumentResponse.class);
+	}
+
 	public static final class CreateCollectionRequest {
 
 		private String name;
@@ -74,17 +92,10 @@ public class MgmtClient {
 		}
 	}
 
-	public static final class CreateCollectionResponse {
+	public static abstract class AbstractResponse {
 
 		private String errorMessage;
 		private int errorNum;
-		private String id;
-		private String name;
-		private boolean waitForSync;
-		private boolean isVolatile;
-		private boolean isSystem;
-		private int status;
-		private CollectionType type;
 		private boolean error;
 		private int code;
 
@@ -103,6 +114,68 @@ public class MgmtClient {
 		public void setErrorNum(int errorNum) {
 			this.errorNum = errorNum;
 		}
+
+		public boolean getError() {
+			return error;
+		}
+
+		public void setError(boolean error) {
+			this.error = error;
+		}
+
+		public int getCode() {
+			return code;
+		}
+
+		public void setCode(int code) {
+			this.code = code;
+		}
+	}
+
+	public static final class DeleteDocumentResponse extends AbstractResponse {
+
+		private String id;
+		private String rev;
+		private String key;
+
+		@JsonProperty("_id")
+		public String getId() {
+			return id;
+		}
+
+		public void setId(String id) {
+			this.id = id;
+		}
+
+		@JsonProperty("_rev")
+		public String getRev() {
+			return rev;
+		}
+
+		public void setRev(String rev) {
+			this.rev = rev;
+		}
+
+		@JsonProperty("_key")
+		public String getKey() {
+			return key;
+		}
+
+		public void setKey(String key) {
+			this.key = key;
+		}
+
+	}
+
+	public static final class CreateCollectionResponse extends AbstractResponse {
+
+		private String id;
+		private String name;
+		private boolean waitForSync;
+		private boolean isVolatile;
+		private boolean isSystem;
+		private int status;
+		private CollectionType type;
 
 		public String getId() {
 			return id;
@@ -159,29 +232,11 @@ public class MgmtClient {
 		public void setType(CollectionType type) {
 			this.type = type;
 		}
-
-		public boolean getError() {
-			return error;
-		}
-
-		public void setError(boolean error) {
-			this.error = error;
-		}
-
-		public int getCode() {
-			return code;
-		}
-
-		public void setCode(int code) {
-			this.code = code;
-		}
 	}
 
-	public static class DeleteCollectionResponse {
+	public static class DeleteCollectionResponse extends AbstractResponse {
 
 		private String id;
-		private boolean error;
-		private int code;
 
 		public String getId() {
 			return id;
@@ -190,41 +245,13 @@ public class MgmtClient {
 		public void setId(String id) {
 			this.id = id;
 		}
-
-		public boolean getError() {
-			return error;
-		}
-
-		public void setError(boolean error) {
-			this.error = error;
-		}
-
-		public int getCode() {
-			return code;
-		}
-
-		public void setCode(int code) {
-			this.code = code;
-		}
 	}
 
-	public static class CreateDocumentResponse {
+	public static class CreateDocumentResponse extends AbstractResponse {
 
-		private boolean error;
 		private String id;
 		private String rev;
 		private String key;
-		private String errorMessage;
-		private long errorCode;
-		private long code;
-
-		public boolean getError() {
-			return error;
-		}
-
-		public void setError(boolean error) {
-			this.error = error;
-		}
 
 		@JsonProperty("_id")
 		public String getId() {
@@ -251,30 +278,6 @@ public class MgmtClient {
 
 		public void setKey(String key) {
 			this.key = key;
-		}
-
-		public String getErrorMessage() {
-			return errorMessage;
-		}
-
-		public void setErrorMessage(String errorMessage) {
-			this.errorMessage = errorMessage;
-		}
-
-		public long getErrorCode() {
-			return errorCode;
-		}
-
-		public void setErrorCode(long errorCode) {
-			this.errorCode = errorCode;
-		}
-
-		public long getCode() {
-			return code;
-		}
-
-		public void setCode(long code) {
-			this.code = code;
 		}
 	}
 }
