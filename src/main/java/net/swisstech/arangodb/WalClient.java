@@ -26,7 +26,7 @@ public class WalClient {
 	private String baseUrl;
 
 	private final OkHttpClient httpClient = new OkHttpClient();
-	private final ObjectMapper mapper = new ObjectMapper();
+	private final ObjectMapper mapper = ObjectMapperFactory.create();
 
 	public WalClient(String baseUrl) {
 		this.baseUrl = baseUrl;
