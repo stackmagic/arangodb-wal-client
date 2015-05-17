@@ -12,6 +12,7 @@ public class CollectionParameters {
 	private String name;
 	private boolean isVolatile;
 	private boolean waitForSync;
+	private long count;
 
 	public long getVersion() {
 		return version;
@@ -91,6 +92,14 @@ public class CollectionParameters {
 
 	public void setWaitForSync(boolean waitForSync) {
 		this.waitForSync = waitForSync;
+	}
+
+	public long getCount() {
+		return count;
+	}
+
+	public void setCount(long count) {
+		this.count = count;
 	}
 
 	@Override
