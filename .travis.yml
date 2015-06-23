@@ -12,7 +12,7 @@ before_script:
   - wget -qO - https://www.arangodb.com/repositories/arangodb2/Debian_7.0/Release.key | sudo apt-key add -
   - echo 'deb https://www.arangodb.com/repositories/arangodb2/Debian_7.0/ /'          | sudo tee -a /etc/apt/sources.list
   - sudo apt-get -q update
-  - sudo apt-get -q install arangodb
+  - sudo apt-get install libgoogle-perftools4 arangodb
   - sudo service arangodb stop
 
 script:
