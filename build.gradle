@@ -34,7 +34,7 @@ targetCompatibility = 1.7
 
 // task to generate wrapper
 task wrapper(type: Wrapper) {
-	gradleVersion = '2.4'
+	gradleVersion = '2.7'
 }
 
 // source-code jar
