@@ -1,3 +1,4 @@
+import net.swisstech.swissarmyknife.sys.linux.PortSnoop
 
 // repositories and dependencies for buildscript itself
 buildscript {
@@ -14,11 +15,9 @@ buildscript {
 plugins {
 	id 'java'
 	id 'jacoco'
-	id 'eclipse'
 	id 'maven-publish'
 	id 'project-report'
-	id 'com.jfrog.bintray'             version '1.2'
-	id 'net.swisstech.eclipseenhancer' version '1.0.0'
+	id 'com.jfrog.bintray' version '1.2'
 }
 
 description = 'Client for the ArangoDB Write-Ahead-Log (WAL) over HTTP'
@@ -29,8 +28,8 @@ version     = '1.1.8'
 buildscript.repositories.each { repositories.add(it) }
 
 // java version
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 // task to generate wrapper
 task wrapper(type: Wrapper) {
@@ -135,8 +134,8 @@ test {
 }
 
 // setup for integration tests, requires a local installation of arangodb
-ext.arangoDbPort  = 18529
-ext.arangoDataDir = "/tmp/arangodb_wal_client_tests_${System.currentTimeMillis()}"
+ext.arangoDbPort = 18529
+ext.dockerName   = "${project.name}-intTest-${System.currentTimeMillis()}"
 
 task('intTest', type: Test, dependsOn: 'intTestClasses') {
 	useTestNG()
@@ -163,24 +162,31 @@ task('jacocoIntTestReport', type: JacocoReport) {
 
 // start & stop arangodb
 afterEvaluate {
+    task('startArangoDb') << {
+        exec {
+            commandLine '/usr/bin/docker', 'run',
+                    '--env', 'ARANGO_NO_AUTH=1',
+                    '--name', project.dockerName,
+                    '--publish', "${project.arangoDbPort}:8529",
+                    '--detach',
+                    '--rm',
+                    'arangodb'
+        }
+        // would prefer to check for open port but this doesn't seem to work anymore. lsof -ti (as used by PortSnoop)
+        // doesn't list the port and even then it only tells us that docker has opended the port, it doesn't tell us
+        // if arangodb is up and running.
+        // PortSnoop.waitForOpenPorts([project.arangoDbPort], 15 * 1000);
+        exec {
+            commandLine 'sleep', '5'
+        }
+    }
 
-	task('startArangoDb') << {
-		new File(project.arangoDataDir + "/data").mkdirs()
-		project.ext.arangodb_process = net.swisstech.swissarmyknife.sys.linux.BackgroundProcess
-			.launch([
-				'/usr/sbin/arangod',
-				'--server.endpoint'   , "tcp://127.0.0.1:${project.arangoDbPort}",
-				'--database.directory', "${project.arangoDataDir}/data",
-				'--log.file'          , '+'
-			], null)
-			.waitForOpenPorts([ project.arangoDbPort ], 10000)
-	}
+    task('stopArangoDb') << {
+        exec {
+            commandLine '/usr/bin/docker', 'stop', project.dockerName
+        }
+    }
 
-	task('stopArangoDb') << {
-		project.arangodb_process.shutdown()
-		project.delete(project.arangoDataDir)
-	}
-
-	tasks.intTest.dependsOn('startArangoDb')
-	tasks.intTest.finalizedBy('stopArangoDb')
+    tasks.intTest.dependsOn('startArangoDb')
+    tasks.intTest.finalizedBy('stopArangoDb')
 }
