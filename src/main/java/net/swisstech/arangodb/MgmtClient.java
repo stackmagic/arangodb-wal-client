@@ -1,19 +1,16 @@
 package net.swisstech.arangodb;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.squareup.okhttp.*;
+import net.swisstech.arangodb.model.CollectionType;
+
 import java.io.IOException;
 import java.io.InputStream;
 
-import net.swisstech.arangodb.model.CollectionType;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
-
-/** TODO this was meant as a client to setup and teardown integration tests but might be useful for other means too */
+/**
+ * TODO this was meant as a client to setup and teardown integration tests but might be useful for other means too
+ */
 public class MgmtClient {
 
 	private static final MediaType MEDIATYPE_JSON = MediaType.parse("application/json; charset=utf-8");
@@ -85,7 +82,8 @@ public class MgmtClient {
 
 		private String name;
 
-		public CreateCollectionRequest() {}
+		public CreateCollectionRequest() {
+		}
 
 		public CreateCollectionRequest(String name) {
 			this.name = name;
@@ -179,11 +177,17 @@ public class MgmtClient {
 
 		private String id;
 		private String name;
+		private String statusString;
+		private String globallyUniqueId;
 		private boolean waitForSync;
 		private boolean isVolatile;
 		private boolean isSystem;
+		private boolean doCompact;
 		private int status;
+		private int indexBuckets;
+		private int journalSize;
 		private CollectionType type;
+		private KeyOptions keyOptions;
 
 		public String getId() {
 			return id;
@@ -199,6 +203,22 @@ public class MgmtClient {
 
 		public void setName(String name) {
 			this.name = name;
+		}
+
+		public String getStatusString() {
+			return statusString;
+		}
+
+		public void setStatusString(String statusString) {
+			this.statusString = statusString;
+		}
+
+		public String getGloballyUniqueId() {
+			return globallyUniqueId;
+		}
+
+		public void setGloballyUniqueId(String globallyUniqueId) {
+			this.globallyUniqueId = globallyUniqueId;
 		}
 
 		public boolean getWaitForSync() {
@@ -225,6 +245,14 @@ public class MgmtClient {
 			this.isSystem = isSystem;
 		}
 
+		public boolean getDoCompact() {
+			return doCompact;
+		}
+
+		public void setDoCompact(boolean doCompact) {
+			this.doCompact = doCompact;
+		}
+
 		public int getStatus() {
 			return status;
 		}
@@ -233,12 +261,36 @@ public class MgmtClient {
 			this.status = status;
 		}
 
+		public int getIndexBuckets() {
+			return indexBuckets;
+		}
+
+		public void setIndexBuckets(int indexBuckets) {
+			this.indexBuckets = indexBuckets;
+		}
+
+		public int getJournalSize() {
+			return journalSize;
+		}
+
+		public void setJournalSize(int journalSize) {
+			this.journalSize = journalSize;
+		}
+
 		public CollectionType getType() {
 			return type;
 		}
 
 		public void setType(CollectionType type) {
 			this.type = type;
+		}
+
+		public KeyOptions getKeyOptions() {
+			return keyOptions;
+		}
+
+		public void setKeyOptions(KeyOptions keyOptions) {
+			this.keyOptions = keyOptions;
 		}
 	}
 
@@ -286,6 +338,36 @@ public class MgmtClient {
 
 		public void setKey(String key) {
 			this.key = key;
+		}
+	}
+
+	public static class KeyOptions {
+		private String type;
+		private boolean allowUserKeys;
+		private int lastValue;
+
+		public String getType() {
+			return type;
+		}
+
+		public void setType(String type) {
+			this.type = type;
+		}
+
+		public boolean getAllowUserKeys() {
+			return allowUserKeys;
+		}
+
+		public void setAllowUserKeys(boolean allowUserKeys) {
+			this.allowUserKeys = allowUserKeys;
+		}
+
+		public int getLastValue() {
+			return lastValue;
+		}
+
+		public void setLastValue(int lastValue) {
+			this.lastValue = lastValue;
 		}
 	}
 }
