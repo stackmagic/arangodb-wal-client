@@ -1,4 +1,4 @@
-import net.swisstech.swissarmyknife.sys.linux.PortSnoop
+import net.swisstech.swissarmyknife.sys.linux.BackgroundProcess
 
 // repositories and dependencies for buildscript itself
 buildscript {
@@ -17,12 +17,12 @@ plugins {
 	id 'jacoco'
 	id 'maven-publish'
 	id 'project-report'
-	id 'com.jfrog.bintray' version '1.2'
+	id 'com.jfrog.bintray' version '1.8.4'
 }
 
 description = 'Client for the ArangoDB Write-Ahead-Log (WAL) over HTTP'
 group       = 'net.swisstech'
-version     = '1.1.8'
+version     = '2.0.0'
 
 // re-use repositories from buildscript
 buildscript.repositories.each { repositories.add(it) }
@@ -32,8 +32,8 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 // task to generate wrapper
-task wrapper(type: Wrapper) {
-	gradleVersion = '2.7'
+wrapper {
+	gradleVersion = '4.10'
 }
 
 // source-code jar
@@ -53,20 +53,10 @@ publishing {
 	}
 }
 
-def getProperty = { String name ->
-	try {
-		return project[name]
-	}
-	catch (MissingPropertyException e) {
-		println "!!! property ${name} is not available"
-		return ""
-	}
-}
-
 bintray {
 	// key and user must be in your ~/.gradle/gradle.properties
-	key          = getProperty('swisstech_bintray_apikey')
-	user         = getProperty('swisstech_bintray_user')
+	user         = project.hasProperty('swisstech_bintray_user')   ? project.swisstech_bintray_user   : System.getenv('SWISSTECH_BINTRAY_USER')
+	key          = project.hasProperty('swisstech_bintray_apikey') ? project.swisstech_bintray_apikey : System.getenv('SWISSTECH_BINTRAY_KEY')
 	dryRun       = false
 	publish      = true
 	publications = [ 'mavenJava' ]
@@ -104,7 +94,7 @@ ext.versions = [
 	, okhttp         : '2.2.0'
 	, commons_io     : '2.4'
 	, swissarmyknife : '1.2.0'
-	, logback_classic: '1.1.2'
+    , slf4j          : '1.8.0-beta2'
 	, testng         : '6.8.17'
 	, mockito        : '1.10.19'
 ]
@@ -115,11 +105,11 @@ dependencies {
 	compile        "commons-io:commons-io:${versions.commons_io}"
 	compile        "net.swisstech:swissarmyknife:${versions.swissarmyknife}"
 
-	testCompile    "ch.qos.logback:logback-classic:${versions.logback_classic}"
+	testCompile    "org.slf4j:slf4j-simple:${versions.slf4j}"
 	testCompile    "org.testng:testng:${versions.testng}"
 	testCompile    "org.mockito:mockito-all:${versions.mockito}"
 
-	intTestCompile "ch.qos.logback:logback-classic:${versions.logback_classic}"
+	intTestCompile "org.slf4j:slf4j-simple:${versions.slf4j}"
 	intTestCompile "org.testng:testng:${versions.testng}"
 	intTestCompile "org.mockito:mockito-all:${versions.mockito}"
 }
@@ -135,15 +125,20 @@ test {
 
 // setup for integration tests, requires a local installation of arangodb
 ext.arangoDbPort = 18529
-ext.dockerName   = "${project.name}-intTest-${System.currentTimeMillis()}"
+ext.arangoDbLaunchCommand = [
+	'/usr/bin/docker', 'run',
+	'--env', 'ARANGO_NO_AUTH=1',
+	'--publish', "${project.arangoDbPort}:8529",
+	'--rm',
+	'arangodb'
+]
 
 task('intTest', type: Test, dependsOn: 'intTestClasses') {
 	useTestNG()
 	testLogging.showStandardStreams = true
-	group          = 'verification'
-	testSrcDirs    = sourceSets.intTest.java.srcDirs as List
-	testClassesDir = sourceSets.intTest.output.classesDir
-	classpath      = sourceSets.intTest.runtimeClasspath
+	group           = 'verification'
+	testClassesDirs = sourceSets.intTest.output.classesDirs
+	classpath       = sourceSets.intTest.runtimeClasspath
 	systemProperty 'ARANGODB_PORT', project.arangoDbPort
 
 	jacoco {
@@ -152,40 +147,30 @@ task('intTest', type: Test, dependsOn: 'intTestClasses') {
 }
 
 jacocoTestReport {
-	reports.html.destination = "${reportsDir}/jacoco/${name}"
+	reports.html.destination = file("${reportsDir}/jacoco/${name}")
 }
 task('jacocoIntTestReport', type: JacocoReport) {
-	reports.html.destination = "${reportsDir}/jacoco/${name}"
+	reports.html.destination = file("${reportsDir}/jacoco/${name}")
 	executionData intTest
 	sourceSets sourceSets.main
 }
 
 // start & stop arangodb
 afterEvaluate {
-    task('startArangoDb') << {
-        exec {
-            commandLine '/usr/bin/docker', 'run',
-                    '--env', 'ARANGO_NO_AUTH=1',
-                    '--name', project.dockerName,
-                    '--publish', "${project.arangoDbPort}:8529",
-                    '--detach',
-                    '--rm',
-                    'arangodb'
-        }
-        // would prefer to check for open port but this doesn't seem to work anymore. lsof -ti (as used by PortSnoop)
-        // doesn't list the port and even then it only tells us that docker has opended the port, it doesn't tell us
-        // if arangodb is up and running.
-        // PortSnoop.waitForOpenPorts([project.arangoDbPort], 15 * 1000);
-        exec {
-            commandLine 'sleep', '5'
-        }
-    }
+	task('dockerCommand').doLast {
+		println project.arangoDbLaunchCommand.join(' ')
+	}
 
-    task('stopArangoDb') << {
-        exec {
-            commandLine '/usr/bin/docker', 'stop', project.dockerName
-        }
-    }
+	task('startArangoDb').doLast {
+		project.ext.arangodb_process =
+				BackgroundProcess
+						.launch(project.arangoDbLaunchCommand, null)
+						.waitForStringInStdout('ready for business', 15 * 1000)
+	}
+
+	task('stopArangoDb').doLast {
+		project.arangodb_process.shutdown()
+	}
 
     tasks.intTest.dependsOn('startArangoDb')
     tasks.intTest.finalizedBy('stopArangoDb')

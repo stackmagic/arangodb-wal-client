@@ -2,18 +2,16 @@
 language: java
 
 jdk:
-  - openjdk7
-  - oraclejdk7
-  - oraclejdk8
+  - openjdk8
+
+sudo: required
+
+services:
+  - docker
 
 before_script:
-  - sudo apt-get -q update
-  - sudo apt-get -q install apt-transport-https
-  - wget -qO - https://www.arangodb.com/repositories/arangodb2/xUbuntu_12.04/Release.key | sudo apt-key add -
-  - echo 'deb https://www.arangodb.com/repositories/arangodb2/xUbuntu_12.04/ /'          | sudo tee -a /etc/apt/sources.list
-  - sudo apt-get -q update
-  - sudo apt-get install arangodb
-  - sudo service arangodb stop
+  - docker pull arangodb
 
 script:
   - ./gradlew intTest
+

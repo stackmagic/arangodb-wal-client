@@ -1,2 +1,5 @@
 
 rootProject.name = 'arangodb-wal-client'
+
+// to be removed once we're using gradle 5.0
+enableFeaturePreview('STABLE_PUBLISHING')

@@ -39,7 +39,15 @@ dependencies {
 </dependency>
 ```
 
+# Changelog
+
+## 2.0.0 (tested against 3.3.x)
+
+* upgrade gradle
+* run inttests with docker
+* fix tests/pojos
 
 # TODO
 
 * WalEvent: prevent parsing of the `data` field and just use it as-is (saves a bit of cpu/mem)
+
