@@ -131,6 +131,7 @@ ext.arangoDbLaunchCommand = [
 	'--publish', "${project.arangoDbPort}:8529",
 	'--rm',
 	'arangodb'
+//	'arangodb/arangodb-preview'
 ]
 
 task('intTest', type: Test, dependsOn: 'intTestClasses') {

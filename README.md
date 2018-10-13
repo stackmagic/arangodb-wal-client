@@ -39,9 +39,16 @@ dependencies {
 </dependency>
 ```
 
+# Compatibility
+
+## 2.0.0
+
+* OK arangodb-3.3.x
+* OK latest 3.4-RC as of 2018-10-13 (RC2 won't start in docker or takeks too long)
+
 # Changelog
 
-## 2.0.0 (tested against 3.3.x)
+## 2.0.0
 
 * upgrade gradle
 * run inttests with docker
