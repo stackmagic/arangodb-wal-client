@@ -1,4 +1,6 @@
 .*
+*.iml
+out
 bin
 build
 target
