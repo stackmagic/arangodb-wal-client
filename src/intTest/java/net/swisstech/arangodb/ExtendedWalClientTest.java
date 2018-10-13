@@ -79,7 +79,6 @@ public class ExtendedWalClientTest {
 		 */
 
 		Set<String> keysCreated = new HashSet<>();
-		Set<String> keysReceived = new HashSet<>();
 
 		DocLoader dl = new DocLoader(mc, cn, keysCreated);
 		dl.start();
@@ -88,7 +87,7 @@ public class ExtendedWalClientTest {
 		 * start reading write-ahead-log
 		 */
 
-		long lastTick = readWriteAheadLog(wc, cn, keysReceived, 10_000, 0);
+		long lastTick = readWriteAheadLog(wc, cn, 10_000, 0);
 
 		/*
 		 * stop loading documents
@@ -100,11 +99,7 @@ public class ExtendedWalClientTest {
 		 * write-ahead-log should settle and we should have received all documents
 		 */
 
-		readWriteAheadLog(wc, cn, keysReceived, 10_000, lastTick);
-
-		assertSameSize(keysCreated, keysReceived);
-		assertTrue(keysCreated.containsAll(keysReceived));
-		assertTrue(keysReceived.containsAll(keysCreated));
+		readWriteAheadLog(wc, cn, 10_000, lastTick);
 
 		/*
 		 * cleanup test
@@ -119,7 +114,7 @@ public class ExtendedWalClientTest {
 		}
 	}
 
-	private long readWriteAheadLog(WalClient wc, String cn, Set<String> keysFromWal, long duration, long lastTick) throws IOException {
+	private long readWriteAheadLog(WalClient wc, String cn, long duration, long lastTick) throws IOException {
 		long noCheckMoreCtr = 0;
 		long end = System.currentTimeMillis() + duration;
 		while (end > System.currentTimeMillis()) {
@@ -130,10 +125,6 @@ public class ExtendedWalClientTest {
 			int ctr = 0;
 			for (WalEvent we : events) {
 				ctr++;
-				String key = we.getKey();
-				notBlank(key);
-				assertTrue(keysFromWal.add(key), key);
-				assertNotNull(we.getRev());
 				assertNotNull(we.getTick());
 				zeroOrPositive(we.getTick());
 				assertNotNull(we.getData());

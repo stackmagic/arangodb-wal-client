@@ -6,6 +6,7 @@ import static net.swisstech.swissarmyknife.lang.Numbers.tryParseLong;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.StringReader;
 
 import net.swisstech.arangodb.model.Inventory;
 import net.swisstech.arangodb.model.LoggerState;
@@ -58,7 +59,11 @@ public class WalClient {
 		String url = baseUrl + "/_api/replication/dump?collection=" + collection + "&from=" + fromTick;
 		Request request = new Request.Builder().url(url).build();
 		Response response = httpClient.newCall(request).execute();
-		Reader reader = response.body().charStream();
+
+		// use system.out for debugging only!
+		String responseString = response.body().string();
+		//System.out.println(responseString);
+		Reader reader = new StringReader(responseString);
 
 		LineIterator li = new LineIterator(reader);
 		WalEventIterator we = new WalEventIterator(li);
